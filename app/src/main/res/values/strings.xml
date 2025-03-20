@@ -3,4 +3,9 @@
     <string name = "next_button">Next</string>
     <string name = "prev_button">Back</string>
     <string name = "slide_number">Slide Number</string>
+    <string name="caption_1"> First Caption</string>
+    <string name="caption_2"> Second Caption</string>
+    <string name="caption_3"> Third Caption</string>
+    <string name="caption_4"> Fourth Caption</string>
+
 </resources>

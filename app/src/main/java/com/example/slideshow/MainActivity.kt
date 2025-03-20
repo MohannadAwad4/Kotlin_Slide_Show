@@ -62,6 +62,15 @@ class MainActivity : ComponentActivity() {
             3 -> R.drawable.img_3
             else -> R.drawable.img_4
         }
+        val captionResource = when(result){
+            1->R.string.caption_1
+            2->R.string.caption_2
+            3->R.string.caption_3
+            else->R.string.caption_4
+
+
+
+        }
 
         Column(
             modifier = modifier,
@@ -72,6 +81,7 @@ class MainActivity : ComponentActivity() {
                 contentDescription = null,
                 modifier = Modifier.size(100.dp)
             )
+           Text(text = stringResource(captionResource))
             Row(modifier = modifier) {
                 Button(
                     onClick = {
