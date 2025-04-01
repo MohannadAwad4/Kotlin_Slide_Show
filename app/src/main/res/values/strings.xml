@@ -7,5 +7,13 @@
     <string name="caption_2"> Second Caption</string>
     <string name="caption_3"> Third Caption</string>
     <string name="caption_4"> Fourth Caption</string>
+    <string name="caption_5">Florida Gators</string>
+    <string name="caption_6">St. John\'s Red Storm</string>
+    <string name="caption_7">Texas Tech Red Raiders</string>
+    <string name="caption_8">Maryland Terrapins</string>
+    <string name="caption_9">Memphis Tigers</string>
+    <string name="caption_10">Missouri Tigers</string>
+    <string name="caption_11">Kansas Jayhawks</string>
+    <string name="caption_12">UConn Huskies</string>
 
 </resources>

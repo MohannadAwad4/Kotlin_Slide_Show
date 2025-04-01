@@ -20,9 +20,11 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.focusable
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
 import androidx.compose.material3.TextField
@@ -30,11 +32,18 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.slideshow.Model.Team
+import androidx.compose.foundation.lazy.items
+import androidx.compose.material3.Surface
+import androidx.compose.ui.platform.LocalLayoutDirection
+import com.example.slideshow.Data.DataSource
 
 
 class MainActivity : ComponentActivity() {
@@ -43,94 +52,50 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             SlideShowTheme {
-                SlideShowWithButton()
+                ScrollApp()
 
             }
         }
     }
 
     @Composable
-    @Preview(showBackground = true)
-    fun SlideShowWithButton(modifier: Modifier = Modifier) {
-        var result by remember { mutableStateOf(1) }
-        // New state for the text field content
-        var textFieldValue by remember { mutableStateOf("1") }
+    fun ScrollApp(){
+        val layoutDirection = LocalLayoutDirection.current
+        Surface { ScrollList(
+            scrollList = DataSource().loadData()
+        ) }
 
-        val imageResource = when (result) {
-            1 -> R.drawable.img_1
-            2 -> R.drawable.img_2
-            3 -> R.drawable.img_3
-            else -> R.drawable.img_4
-        }
-        val captionResource = when(result){
-            1->R.string.caption_1
-            2->R.string.caption_2
-            3->R.string.caption_3
-            else->R.string.caption_4
-
-
-
-        }
-
-        Column(
-            modifier = modifier,
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
+    }
+    @Composable
+    fun ScrollCard(team: Team, modifier: Modifier=Modifier){
+        Column() {
             Image(
-                painter = painterResource(imageResource),
+                painter = painterResource(team.imageResourceId),
                 contentDescription = null,
-                modifier = Modifier.size(100.dp)
+                modifier = Modifier.fillMaxWidth()
+                    .height(194.dp),
+                contentScale = ContentScale.Crop
             )
-           Text(text = stringResource(captionResource))
-            Row(modifier = modifier) {
-                Button(
-                    onClick = {
-                        result -= 1
-                        textFieldValue = result.toString() // Sync text field when button is used
-                    },
-                    enabled = result > 1,
-                    modifier = Modifier.size(width = 80.dp, height = 50.dp)
-                ) {
-                    Text(stringResource(R.string.prev_button))
-                }
-                Button(
-                    onClick = {
-                        result += 1
-                        textFieldValue = result.toString() // Sync text field when button is used
-                    },
-                    enabled = result < 4,
-                    modifier = Modifier.size(width = 80.dp, height = 50.dp)
-                ) {
-                    Text(stringResource(R.string.next_button))
-                }
-            }
-            Spacer(modifier = Modifier.height(100.dp))
-            EditSlideNumber(
-                res = textFieldValue,
-                onValueChange = { newText ->
-                    textFieldValue = newText // Allow user to modify text freely
-                    newText.toIntOrNull()?.let { result = it } // Update slide only if valid
-                }
-            )
+            Text(
+                text = LocalContext.current.getString(team.stringResourceId),
+
+                )
         }
     }
-
     @Composable
-    fun EditSlideNumber(
-        res: String,
-        onValueChange: (String) -> Unit,
-        modifier: Modifier = Modifier
-    ) {
-        TextField(
-            value = res,
-            onValueChange = onValueChange,
-            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-            singleLine = true,
-            label = { Text(stringResource(R.string.slide_number)) },
-            modifier = modifier
-        )
-    }
+    fun ScrollList(scrollList: List<Team>,modifier: Modifier = Modifier){
+        LazyColumn (modifier=modifier){
+            items(scrollList){scroll ->
+                ScrollCard(
+                    team = scroll,
+                    modifier = Modifier.padding(8.dp)
 
+
+                    )
+            }
+
+        }
+    }
 
 
 }
